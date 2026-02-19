@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Injection Detection Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 400px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        input, textarea {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>SQL Injection Detection Tool</h2>
+
+        <textarea id="userInput" placeholder="Enter SQL Query or User Input"></textarea>
+        <br>
+        <button onclick="detectSQL()">Check for SQL Injection</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function detectSQL() {
+            let input = document.getElementById("userInput").value;
+            let result = document.getElementById("result");
+
+            let patterns = [
+                /' OR 1=1/i,
+                /--/i,
+                /DROP TABLE/i,
+                /SELECT \*/i,
+                /INSERT INTO/i,
+                /DELETE FROM/i
+            ];
+
+            let isMalicious = patterns.some(pattern => pattern.test(input));
+
+            if (isMalicious) {
+                result.style.color = "red";
+                result.innerHTML = "⚠️ Potential SQL Injection Detected!";
+            } else {
+                result.style.color = "green";
+                result.innerHTML = "✅ Input Looks Safe.";
+            }
+        }
+    </script>
+
+</body>
+</html>
